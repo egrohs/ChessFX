@@ -2,7 +2,6 @@ package javachessgui2.model;
 
 public class Piece
 {
-    
     public final static int SLIDING=32;
     public final static int STRAIGHT=16;
     public final static int DIAGONAL=8;
@@ -27,7 +26,35 @@ public class Piece
     final static int TYPE=62;
     final static int COLOR=1;
     
-    public char fen_char=' ';
+    char fen_char=' ';
+    
+    public static double influence(char fen_char)
+    {
+        switch(Character.toLowerCase(fen_char))
+        {
+            case 'p':return 9;
+            case 'n':return 5;
+            case 'b':return 5;
+            case 'r':return 3;
+            case 'q':return 1;
+            case 'k':return 0.1;
+            default: return 0;
+        }
+    }
+    
+    public static double value(char fen_char)
+    {
+        switch(Character.toLowerCase(fen_char))
+        {
+            case 'p':return 1;
+            case 'n':return 3;
+            case 'b':return 3.5;
+            case 'r':return 5;
+            case 'q':return 9;
+            case 'k':return Integer.MAX_VALUE;
+            default: return 0;
+        }
+    }
     
     public static int color(char fen_char)
     {
@@ -252,5 +279,8 @@ public class Piece
     {
         
     }
-    
+
+	public char getFen_char() {
+		return fen_char;
+	}
 }

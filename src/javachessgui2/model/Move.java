@@ -14,7 +14,7 @@ public class Move extends RawMove
             System.out.println(
                     "[ Move "+super.print_as_string()+
                     " : ep square = "+ep_square.to_algeb()+
-                    " , prom piece = ("+prom_piece.fen_char+") ]"
+                    " , prom piece = ("+prom_piece.getFen_char()+") ]"
             );
             return;
         }
@@ -75,7 +75,7 @@ public class Move extends RawMove
             return (valid=false);
         }
         
-        prom_piece.from_fen_char_safe(set_prom_piece.fen_char);
+        prom_piece.from_fen_char_safe(set_prom_piece.getFen_char());
         
         return (valid=true);
     

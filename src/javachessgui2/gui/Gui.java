@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
+import javachessgui2.info.Analizer;
 import javachessgui2.model.Board;
 import javachessgui2.model.Game;
 import javachessgui2.model.GameNode;
@@ -339,6 +340,7 @@ public class Gui {
 	/////////////////////////////////////////////
 
 	static Game game = new Game();
+	static Analizer an = new Analizer(game.board.board);
 
 	/////////////////////////////////////////////
 
@@ -1344,10 +1346,14 @@ public class Gui {
 
 		}
 
-		draw_board();
-
 		highlight_last_move();
-
+		an.computeSquareValues();
+		System.out.println("Black");
+		an.printVals(-1);
+		System.out.println("White");
+		an.printVals(1);
+		
+		draw_board();
 	}
 
 	static void highlight_last_move() {
@@ -1692,8 +1698,8 @@ public class Gui {
 	static void put_piece_xy(Piece p, int x, int y, GraphicsContext gc, int i, int j) {
 		int piece_color = p.color();
 
-		String font = fen_char_to_font_at(current_style.checks[BoardStyle.FONT_ONLY] ? p.fen_char : p.lower_fen_char(),
-				i, j);
+		String font = fen_char_to_font_at(
+				current_style.checks[BoardStyle.FONT_ONLY] ? p.getFen_char() : p.lower_fen_char(), i, j);
 
 		if ((!p.empty()) || current_style.checks[BoardStyle.FONT_ONLY]) {
 			if (current_style.checks[BoardStyle.DO_FILL]) {
@@ -1719,22 +1725,14 @@ public class Gui {
 	}
 
 	static void draw_board() {
-
 		clear_board();
-
 		for (int j = 0; j < 8; j++) {
 			for (int i = 0; i < 8; i++) {
-
 				fill_square(i, j);
-
 				put_piece_xy(game.board.board[i][j], i_to_font_x(i), j_to_font_y(j), board_canvas_gc, i, j);
-
 			}
-
 		}
-
 		fen_text.setText(game.board.report_fen());
-
 	}
 
 	/////////////////////////////////////////////

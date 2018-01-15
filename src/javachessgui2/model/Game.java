@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javachessgui2.info.Analizer;
 import javachessgui2.util.MyFile;
 import javachessgui2.util.MyTokenizer;
 
@@ -18,7 +19,6 @@ class GameNodeComparator implements Comparator<GameNode> {
 }
 
 public class Game {
-
 	public String pgn;
 
 	public Boolean flip = false;
@@ -51,7 +51,7 @@ public class Game {
 	public GameNode current_node;
 
 	public Board board = new Board();
-
+	Analizer an = new Analizer(board.board);
 	final int ST_LEAD = 0;
 	final int ST_HEAD = 1;
 	final int ST_SEP = 2;

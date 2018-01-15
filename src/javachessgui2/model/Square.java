@@ -1,13 +1,22 @@
 package javachessgui2.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Square {
+	List<Piece> directAttackedBy = new ArrayList<Piece>();
+	List<Piece> indirectAttackedBy = new ArrayList<Piece>();
 
 	public Boolean valid = false;
-
 	// file 0 .. 7 ( a = 0, h = 7 )
 	public int i;
 	// rank 0 .. 7 ( 8 = 0, 1 = 7 )
 	public int j;
+
+	private Piece piece;
+	public int whiteInf, blackInf;
+	public int qntWhiteInf;
+	public int qntBlackInf;
 
 	public void print() {
 		System.out.println(valid ? "[ Square : i = " + i + " , j = " + j + " , algeb = " + to_algeb() + " ]"
@@ -79,6 +88,10 @@ public class Square {
 
 	}
 
+	public Square(Piece p) {
+		this.piece = p;
+	}
+
 	public Square(String algeb) {
 		from_algeb(algeb);
 	}
@@ -87,4 +100,7 @@ public class Square {
 		from_ij(set_i, set_j);
 	}
 
+	public Piece getPiece() {
+		return piece;
+	}
 }
