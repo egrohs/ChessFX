@@ -14,6 +14,15 @@ public class Analizer {
 		}
 	}
 
+	public void calc() {
+		for (int c = 0; c < 8; c++) {
+			for (int r = 0; r < 8; r++) {
+				Square sq = board[c][r];
+				sq.calcResult(board);
+			}
+		}
+	}
+
 	public void printVals(int color) {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board.length; c++) {
@@ -27,18 +36,20 @@ public class Analizer {
 		}
 	}
 
-	private void whiteIncreaseValue(int x, int y, char defender) {
-		//Piece defender = board[x][y].getPiece();
+	private void whiteIncreaseValue(int x, int y, Square sq) {
+		// Piece defender = board[x][y].getPiece();
 		if (0 <= x && x < 8 && 0 <= y && y < 8) {
-			board[x][y].whiteInf += Piece.influence(defender);
+			// board[x][y].targeredByWhite.add(sq.getPiece());
+			board[x][y].whiteInf += Piece.influence(sq.getPiece().getFen_char());
 			board[x][y].qntWhiteInf++;
 		}
 	}
 
-	private void blackDecreaseValue(int x, int y, char defender) {
-		//Piece defender = board[x][y].getPiece();
+	private void blackDecreaseValue(int x, int y, Square sq) {
+		// Piece defender = board[x][y].getPiece();
 		if (0 <= x && x < 8 && 0 <= y && y < 8) {
-			board[x][y].blackInf += Piece.influence(defender);
+			// board[x][y].targeredByBlack.add(sq.getPiece());
+			board[x][y].blackInf -= Piece.influence(sq.getPiece().getFen_char());
 			board[x][y].qntBlackInf++;
 		}
 	}
@@ -46,7 +57,7 @@ public class Analizer {
 	public void computeSquareValues() {
 		for (Square[] squares : board) {
 			for (Square s : squares) {
-				// s.value = 0;
+				s.attackers.clear();
 				s.qntWhiteInf = 0;
 				s.qntBlackInf = 0;
 				s.whiteInf = 0;
@@ -59,8 +70,8 @@ public class Analizer {
 		int[] yy = { -2, -1, 1, 2 };
 		for (int c = 0; c < 8; c++) {
 			for (int r = 0; r < 8; r++) {
-				char defender = board[c][r].getPiece().getFen_char();
-				switch (defender) {
+				Square defender = board[c][r];
+				switch (defender.getPiece().getFen_char()) {
 				// White Pieces first
 				case 'R':
 					// horizontal

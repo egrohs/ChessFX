@@ -1052,7 +1052,7 @@ public class Gui {
 
 	static void clip_info(String content, Boolean to) {
 
-		Javachessgui2.system_message("<b>Content copied " + (to ? "to" : "from") + " clipboard</b>:\n\n" + content,
+		Main.system_message("<b>Content copied " + (to ? "to" : "from") + " clipboard</b>:\n\n" + content,
 				4000);
 
 	}
@@ -1066,7 +1066,7 @@ public class Gui {
 
 		my_file.write_content();
 
-		Javachessgui2.system_message("<b>Saved to file: <br><font color=\"green\">" + my_file.get_path()
+		Main.system_message("<b>Saved to file: <br><font color=\"green\">" + my_file.get_path()
 				+ "</font><br><font color=\"red\" size=\"7\">" + my_file.get_name_only()
 				+ "</font><font color=\"green\" size=\"4\">." + my_file.get_extension_only()
 				+ "</font>\n\nContent</b>:\n\n" + my_file.content, 3000);
@@ -1347,12 +1347,12 @@ public class Gui {
 		}
 
 		highlight_last_move();
-		an.computeSquareValues();
-		System.out.println("Black");
-		an.printVals(-1);
-		System.out.println("White");
-		an.printVals(1);
-		
+//		an.computeSquareValues();
+//		System.out.println("Black");
+//		an.printVals(-1);
+//		System.out.println("White");
+//		an.printVals(1);
+		an.calc();
 		draw_board();
 	}
 
@@ -1622,7 +1622,7 @@ public class Gui {
 		highlight_canvas.setOpacity(0.3);
 		highlight_canvas_gc.setFill(Color.rgb(255, 255, 0));
 
-		font_stream = Javachessgui2.class.getResourceAsStream("../resources/fonts/" + current_style.font);
+		font_stream = Main.class.getResourceAsStream("../resources/fonts/" + current_style.font);
 
 		chess_font = Font.loadFont(font_stream, piece_size);
 
@@ -1976,19 +1976,19 @@ public class Gui {
 		gui_stage.setScene(scene);
 
 		board_pane_vertical_box.getChildren().add(board_canvas_group);
-		Image imageSave = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/save.bmp"));
-		Image imageOpen = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/open.bmp"));
-		Image imageDel = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/del.bmp"));
-		Image imageBack = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/back.bmp"));
-		Image imageForward = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/forward.bmp"));
-		Image imageBegin = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/begin.bmp"));
-		Image imageEnd = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/end.bmp"));
-		Image imageOptions = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/options.bmp"));
-		Image imageFlip = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/flip.bmp"));
-		Image imageReset = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/reset.bmp"));
-		Image imageStart = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/start.bmp"));
-		Image imageStop = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/stop.bmp"));
-		Image imageMake = new Image(Javachessgui2.class.getResourceAsStream("../resources/icons/make.bmp"));
+		Image imageSave = new Image(Main.class.getResourceAsStream("../resources/icons/save.bmp"));
+		Image imageOpen = new Image(Main.class.getResourceAsStream("../resources/icons/open.bmp"));
+		Image imageDel = new Image(Main.class.getResourceAsStream("../resources/icons/del.bmp"));
+		Image imageBack = new Image(Main.class.getResourceAsStream("../resources/icons/back.bmp"));
+		Image imageForward = new Image(Main.class.getResourceAsStream("../resources/icons/forward.bmp"));
+		Image imageBegin = new Image(Main.class.getResourceAsStream("../resources/icons/begin.bmp"));
+		Image imageEnd = new Image(Main.class.getResourceAsStream("../resources/icons/end.bmp"));
+		Image imageOptions = new Image(Main.class.getResourceAsStream("../resources/icons/options.bmp"));
+		Image imageFlip = new Image(Main.class.getResourceAsStream("../resources/icons/flip.bmp"));
+		Image imageReset = new Image(Main.class.getResourceAsStream("../resources/icons/reset.bmp"));
+		Image imageStart = new Image(Main.class.getResourceAsStream("../resources/icons/start.bmp"));
+		Image imageStop = new Image(Main.class.getResourceAsStream("../resources/icons/stop.bmp"));
+		Image imageMake = new Image(Main.class.getResourceAsStream("../resources/icons/make.bmp"));
 
 		clip_to_fen_button = new MyButton("Clip->Fen");
 		fen_to_clip_button = new MyButton("Fen->Clip");
