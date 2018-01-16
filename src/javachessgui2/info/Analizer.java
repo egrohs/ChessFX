@@ -15,10 +15,10 @@ public class Analizer {
 	}
 
 	public void calc() {
-		for (int c = 0; c < 8; c++) {
-			for (int r = 0; r < 8; r++) {
+		for (int r = 0; r < 8; r++) {
+			for (int c = 0; c < 8; c++) {
 				Square sq = board[c][r];
-				sq.calcResult(board);
+				sq.direction(board);
 			}
 		}
 	}

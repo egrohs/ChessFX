@@ -1,6 +1,5 @@
 package javachessgui2.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,34 +19,94 @@ public class Square {
 	public double whiteInf, blackInf, result;
 	public int qntWhiteInf, qntBlackInf;
 
-	public void calcResult(Square[][] board) {
-		Point[] dirs = { new Point(1, 1), new Point(-1, -1), new Point(1, -1), new Point(-1, 1), new Point(1, 0),
-				new Point(0, 1), new Point(-1, 0), new Point(0, -1), };
+	public void direction(Square[][] board) {
+		// List<Square> list = attackers.get(inc);
+		// if (list == null) {
+		// list = new ArrayList<Square>();
+		// attackers.put(inc, list);
+		// }
+		// if() {
+		// list.add(attacker);}
+		// res = new Point(res.x + d.x, res.y + d.y);
+		// }
 
-		for (Point d : dirs) {
-			Point res = new Point(i + d.x, j + d.y);
-			int inc = 0;
-			while (res.x >= 0 && res.x < 8 && res.y >= 0 && res.y < 8) {
-				Square attacker = board[res.x][res.y];
-				switch (Character.toLowerCase(attacker.getPiece().getFen_char())) {
-				//TODO peoes tem que ver a cor, pois nao atacam pra traz.
-				case 'p':
-					
-					break;
+		// vai indo numa das 8 direcoes ate encontrar uma peça com range. Continua
+		// enquando entrar peças da mesma cor..
 
-				default:
-					break;
-				}
-				inc++;
-				List<Square> list = attackers.get(inc);
+		// leste
+		dir(board, 1, 0);
+		// oeste
+		dir(board, -1, 0);
+		// norte
+		dir(board, 0, -1);
+		// sul
+		dir(board, 0, 1);
+		// nordeste
+		dir(board, 1, -1);
+		// sudeste
+		dir(board, 1, 1);
+		// sudoeste
+		dir(board, 1, 1);
+		// noroeste
+		dir(board, -1, -1);
+	}
+
+	private void dir(Square[][] board, int col, int lin) {
+		Integer color = null;
+		for (int cont = 1, x = i + col * cont, y = j + lin * cont; x >= 0 && x < 8 && y >= 0
+				&& y < 8; cont++, x = i + col * cont, y = j + lin * cont) {
+			Square sq = null;
+			sq = board[x][y];
+			Piece p = sq.getPiece();
+			if (color == null) {
+				color = p.color();
+			}
+			if (p != null && color == p.color() && (sq.piece.type() & sq.piece.tipo(col, lin)) != 0) {
+				List<Square> list = attackers.get(cont);
 				if (list == null) {
 					list = new ArrayList<Square>();
-					attackers.put(inc, list);
 				}
-				list.add(attacker);
-				res = new Point(res.x + d.x, res.y + d.y);
+				list.add(sq);
+				// color = p.color();
+				attackers.put(cont, list);
+			} else {
+				break;
 			}
 		}
+	}
+
+	private void ff(Square[][] board) {
+		// for (int cont = 1; cont < 8; cont++) {
+		// // retas
+		// if ((this.piece.code() & Piece.STRAIGHT) != 0) {
+		// // torre, queen
+		//
+		//
+		// board[i+cont][j];
+		// board[i][j+cont];
+		//
+		// if() {
+		// break;
+		// }
+		//
+		// if ((this.piece.code() & Piece.SINGLE) != 0) {
+		// // king
+		// }
+		// }
+		// // diagonal, bishop, queen, *king(+1), *peao(+1, pra frente)
+		// if ((this.piece.code() & Piece.DIAGONAL) != 0) {
+		// board[i+cont][j+cont];
+		// if ((this.piece.code() & Piece.SINGLE) != 0) {
+		// // king
+		// }
+		// } else if ((this.piece.code() & Piece.PAWN) != 0) {
+		// // king
+		// }
+		// // move em ele, knight
+		// if ((this.piece.code() & Piece.KNIGHT) != 0) {
+		//
+		// }
+		// }
 	}
 
 	public void print() {
