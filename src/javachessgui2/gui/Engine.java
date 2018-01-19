@@ -41,7 +41,7 @@ public class Engine {
 
 	String pv = "";
 	String bestmove_algeb = "";
-	Move bestmove = new Move();
+	Move bestmove;//??? = new Move();
 	int depth = 0;
 	int score_mate = 0;
 	int score_cp = 0;

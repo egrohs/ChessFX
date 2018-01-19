@@ -156,15 +156,10 @@ public class Square {
 		return ((s.i == i) && (s.j == j));
 	}
 
-	public Square() {
-	}
-
-	public Square(Piece p) {
-		this.piece = p;
-	}
-
 	public Square(String algeb) {
-		from_algeb(algeb);
+		if (!from_algeb(algeb)) {
+			throw new IllegalArgumentException("creating square " + algeb);
+		}
 	}
 
 	public Square(int set_i, int set_j) {
@@ -173,5 +168,17 @@ public class Square {
 
 	public Piece getPiece() {
 		return piece;
+	}
+
+	public void setPiece(Piece piece) {
+		this.piece = piece;
+	}
+
+	@Override
+	public String toString() {
+		if (piece != null) {
+			return piece.fen_char + "(" + i + ", " + j + ")";
+		}
+		return "(" + i + ", " + j + ")";
 	}
 }

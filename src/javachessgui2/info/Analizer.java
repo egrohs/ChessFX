@@ -9,7 +9,8 @@ public class Analizer {
 	public Analizer(Piece[][] b) {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board.length; c++) {
-				board[c][r] = new Square(b[c][r]);
+				board[c][r] = new Square(c,r);
+				board[c][r].setPiece(b[c][r]);
 			}
 		}
 	}

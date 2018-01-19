@@ -297,4 +297,9 @@ public class Piece {
 	public char getFen_char() {
 		return fen_char;
 	}
+
+	@Override
+	public String toString() {
+		return "" + fen_char;
+	}
 }
