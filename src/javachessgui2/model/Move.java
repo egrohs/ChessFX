@@ -2,6 +2,7 @@ package javachessgui2.model;
 
 public class Move extends RawMove {
 	public Square ep_square;// ??? = new Square();
+	//promotion
 	public Piece prom_piece = new Piece();
 
 	public void print() {

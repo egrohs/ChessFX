@@ -257,6 +257,10 @@ public class Piece {
 	public Boolean sliding() {
 		return ((code() & SLIDING) != 0);
 	}
+	
+	public Boolean single() {
+		return ((code() & SINGLE) != 0);
+	}
 
 	public void clear() {
 		fen_char = ' ';

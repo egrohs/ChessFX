@@ -46,7 +46,7 @@ public class Square {
 		// sudeste
 		dir(board, 1, 1);
 		// sudoeste
-		dir(board, 1, 1);
+		dir(board, -1, 1);
 		// noroeste
 		dir(board, -1, -1);
 	}
@@ -61,7 +61,9 @@ public class Square {
 			if (color == null) {
 				color = p.color();
 			}
-			if (p != null && color == p.color() && (sq.piece.type() & sq.piece.tipo(col, lin)) != 0) {
+			//TODO esta errado, observar o ataque do rei e peoes...
+			if ((!p.single() && !distaMais1(sq))
+					|| (p != null && color == p.color() && (sq.piece.type() & sq.piece.tipo(col, lin)) != 0)) {
 				List<Square> list = attackers.get(cont);
 				if (list == null) {
 					list = new ArrayList<Square>();
@@ -75,38 +77,8 @@ public class Square {
 		}
 	}
 
-	private void ff(Square[][] board) {
-		// for (int cont = 1; cont < 8; cont++) {
-		// // retas
-		// if ((this.piece.code() & Piece.STRAIGHT) != 0) {
-		// // torre, queen
-		//
-		//
-		// board[i+cont][j];
-		// board[i][j+cont];
-		//
-		// if() {
-		// break;
-		// }
-		//
-		// if ((this.piece.code() & Piece.SINGLE) != 0) {
-		// // king
-		// }
-		// }
-		// // diagonal, bishop, queen, *king(+1), *peao(+1, pra frente)
-		// if ((this.piece.code() & Piece.DIAGONAL) != 0) {
-		// board[i+cont][j+cont];
-		// if ((this.piece.code() & Piece.SINGLE) != 0) {
-		// // king
-		// }
-		// } else if ((this.piece.code() & Piece.PAWN) != 0) {
-		// // king
-		// }
-		// // move em ele, knight
-		// if ((this.piece.code() & Piece.KNIGHT) != 0) {
-		//
-		// }
-		// }
+	public boolean distaMais1(Square other) {
+		return Math.max(Math.abs(this.i) - Math.abs(other.i), Math.abs(this.j) - Math.abs(other.j)) > 1;
 	}
 
 	public void print() {

@@ -2,8 +2,8 @@ package javachessgui2.model;
 
 public class RawMove {
 	Boolean valid = false;
-	public Square from;//??? = new Square();
-	public Square to;//??? = new Square();
+	public Square from = new Square("a1");
+	public Square to = new Square("a1");
 
 	public String print_as_string() {
 		return (valid
