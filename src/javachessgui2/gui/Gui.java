@@ -243,7 +243,6 @@ public class Gui {
 	static Hashtable translit_dark = new Hashtable();
 	/////////////////////////////////////////////
 	static Game game = new Game();
-	static Analizer an = new Analizer(game.board.board);
 	/////////////////////////////////////////////
 	public static void show() {
 		gui_stage.show();
@@ -929,8 +928,8 @@ public class Gui {
 		// an.printVals(-1);
 		// System.out.println("White");
 		// an.printVals(1);
-		an.calc();
 		draw_board();
+		Analizer.calc(game.board.board);
 	}
 	static void highlight_last_move() {
 		highlight_canvas_gc.clearRect(0, 0, board_size, board_size);

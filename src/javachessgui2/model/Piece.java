@@ -28,7 +28,7 @@ public class Piece {
 	char fen_char = ' ';
 
 	public int tipo(int x, int y) {
-		if (x > 0 && y > 0) {
+		if (x != 0 && y != 0) {
 			return DIAGONAL;
 		} else
 			return STRAIGHT;

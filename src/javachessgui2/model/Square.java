@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Square {
-	public Map<Integer, List<Square>> attackers = new LinkedHashMap<Integer, List<Square>>();
-	// public List<Piece> targeredByBlack = new ArrayList<Piece>();
-	// public List<Piece> targeredByWhite = new ArrayList<Piece>();
+	public Map<Integer, List<Square>> whiteInfluece = new LinkedHashMap<Integer, List<Square>>();
+	public Map<Integer, List<Square>> blackInfluece = new LinkedHashMap<Integer, List<Square>>();
+//	public List<Square> whiteInfluece = new ArrayList<Square>();
+//	public List<Square> blackInfluece = new ArrayList<Square>();
 	// public List<Piece> indirectAttackedBy = new ArrayList<Piece>();
 	public Boolean valid = false;
 	// file 0 .. 7 ( a = 0, h = 7 )
@@ -16,20 +17,14 @@ public class Square {
 	// rank 0 .. 7 ( 8 = 0, 1 = 7 )
 	public int j;
 	private Piece piece;
-	public double whiteInf, blackInf, result;
-	public int qntWhiteInf, qntBlackInf;
+	public double result;
+	// public int qntWhiteInf, qntBlackInf;
+	private boolean add;
 
 	public void direction(Square[][] board) {
-		// List<Square> list = attackers.get(inc);
-		// if (list == null) {
-		// list = new ArrayList<Square>();
-		// attackers.put(inc, list);
-		// }
-		// if() {
-		// list.add(attacker);}
-		// res = new Point(res.x + d.x, res.y + d.y);
-		// }
-
+		result = 0;
+		whiteInfluece.clear();
+		blackInfluece.clear();
 		// vai indo numa das 8 direcoes ate encontrar uma peça com range. Continua
 		// enquando entrar peças da mesma cor..
 
@@ -49,36 +44,94 @@ public class Square {
 		dir(board, -1, 1);
 		// noroeste
 		dir(board, -1, -1);
+//TODO os fors nao precisam ir ate cont < 10  ou board.length
+		for (int cont = 0; cont < 10; cont++) {
+			List<Square> wInf = whiteInfluece.get(cont);
+			List<Square> bInf = blackInfluece.get(cont);
+			for (int index = 0; index < board.length; index++) {
+				double wv = 0;
+				double bv = 0;
+				if (wInf != null && bInf != null) {
+					wv = Piece.influence(wInf.get(index).piece.fen_char);
+					bv = Piece.influence(bInf.get(index).piece.fen_char);
+					if (wv - bv != 0) {
+						result = wv - bv;
+						return;
+					}
+				} else if (wInf != null && index < wInf.size()) {
+					wv = Piece.influence(wInf.get(index).piece.fen_char);
+					result += wv;// TODO soma das influencias brancas;
+				} else if (bInf != null && index < bInf.size()) {
+					bv = Piece.influence(bInf.get(index).piece.fen_char);
+					result += bv;// TODO soma das influencias pretas;
+				} else {
+					// casa neutra
+					// result = 0;
+					// return;
+				}
+			}
+		}
 	}
 
 	private void dir(Square[][] board, int col, int lin) {
 		Integer color = null;
-		for (int cont = 1, x = i + col * cont, y = j + lin * cont; x >= 0 && x < 8 && y >= 0
+		add = true;
+		for (int cont = 1, x = i + col * cont, y = j + lin * cont; add && x >= 0 && x < 8 && y >= 0
 				&& y < 8; cont++, x = i + col * cont, y = j + lin * cont) {
+			add = false;
 			Square sq = null;
 			sq = board[x][y];
 			Piece p = sq.getPiece();
 			if (color == null) {
 				color = p.color();
 			}
-			//TODO esta errado, observar o ataque do rei e peoes...
-			if ((!p.single() && !distaMais1(sq))
-					|| (p != null && color == p.color() && (sq.piece.type() & sq.piece.tipo(col, lin)) != 0)) {
-				List<Square> list = attackers.get(cont);
-				if (list == null) {
-					list = new ArrayList<Square>();
+			// TODO knigh
+			if (p.code() != Piece.PIECE_NONE) {
+				if (Piece.COLOR_NONE == color || color == p.color()) {
+					if (!p.single() && (p.type() & p.tipo(col, lin)) != 0) {
+						// RQB apenas (risco rei)
+						addTh(p.color(), cont, sq);
+					} else if (!distaMais1(sq)) {
+						// peao ou rei
+						if (p.type() == Piece.PAWN && col != 0 && ((p.color() == Piece.WHITE && lin == 1)
+								|| (p.color() == Piece.BLACK && lin == -1))) {
+							// peao
+							addTh(p.color(), cont, sq);
+						} else if (p.type() == Piece.KING) {
+							// rei
+							addTh(p.color(), cont, sq);
+						}
+					}
 				}
-				list.add(sq);
-				// color = p.color();
-				attackers.put(cont, list);
 			} else {
-				break;
+				add = true;
 			}
 		}
 	}
 
+	private void addTh(int color, int cont, Square sq) {
+		List<Square> list = null;
+		if (color == Piece.WHITE) {
+			list = whiteInfluece.get(cont);
+		} else {
+			list = blackInfluece.get(cont);
+		}
+		if (list == null) {
+			list = new ArrayList<Square>();
+		}
+		list.add(sq);
+		// color = p.color();
+		if (color == Piece.WHITE) {
+			whiteInfluece.put(cont, list);
+		} else {
+			blackInfluece.put(cont, list);
+		}
+		add = true;
+	}
+
 	public boolean distaMais1(Square other) {
-		return Math.max(Math.abs(this.i) - Math.abs(other.i), Math.abs(this.j) - Math.abs(other.j)) > 1;
+		return Math.max(Math.abs(Math.abs(this.i) - Math.abs(other.i)),
+				Math.abs(Math.abs(this.j) - Math.abs(other.j))) > 1;
 	}
 
 	public void print() {
