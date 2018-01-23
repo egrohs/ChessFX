@@ -17,8 +17,6 @@ public class Analizer {
 
 	public static void calc(Piece[][] b) {
 		geraBoard(b);
-		// TODO a peça esta saindo da origem mas nao esta entrando no destino, board[][]
-		// !!!
 		for (int c = 0; c < 8; c++) {
 			for (int r = 0; r < 8; r++) {
 				Square sq = board[c][r];
@@ -32,8 +30,9 @@ public class Analizer {
 	private static void printVals() {
 		for (int r = 0; r < board.length; r++) {
 			for (int c = 0; c < board.length; c++) {
-				if (board[c][r].result < 10)
-					System.out.print(0);
+				double res = board[c][r].result;
+				if (0 <= res && res < 10)
+					System.out.print("00");
 				System.out.print((int) board[c][r].result + "  ");
 				// if (color == 1) {
 				// System.out.print(board[c][r].whiteInf + " ");

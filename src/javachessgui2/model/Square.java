@@ -1,15 +1,15 @@
 package javachessgui2.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Square {
-	public Map<Integer, List<Square>> whiteInfluece = new LinkedHashMap<Integer, List<Square>>();
-	public Map<Integer, List<Square>> blackInfluece = new LinkedHashMap<Integer, List<Square>>();
-//	public List<Square> whiteInfluece = new ArrayList<Square>();
-//	public List<Square> blackInfluece = new ArrayList<Square>();
+	// public Map<Integer, List<Square>> whiteInfluece = new LinkedHashMap<Integer,
+	// List<Square>>();
+	// public Map<Integer, List<Square>> blackInfluece = new LinkedHashMap<Integer,
+	// List<Square>>();
+	public List<Square> whiteInfluece = new ArrayList<Square>();
+	public List<Square> blackInfluece = new ArrayList<Square>();
 	// public List<Piece> indirectAttackedBy = new ArrayList<Piece>();
 	public Boolean valid = false;
 	// file 0 .. 7 ( a = 0, h = 7 )
@@ -44,33 +44,29 @@ public class Square {
 		dir(board, -1, 1);
 		// noroeste
 		dir(board, -1, -1);
-//TODO os fors nao precisam ir ate cont < 10  ou board.length
-		for (int cont = 0; cont < 10; cont++) {
-			List<Square> wInf = whiteInfluece.get(cont);
-			List<Square> bInf = blackInfluece.get(cont);
-			for (int index = 0; index < board.length; index++) {
-				double wv = 0;
-				double bv = 0;
-				if (wInf != null && bInf != null) {
-					wv = Piece.influence(wInf.get(index).piece.fen_char);
-					bv = Piece.influence(bInf.get(index).piece.fen_char);
-					if (wv - bv != 0) {
-						result = wv - bv;
-						return;
-					}
-				} else if (wInf != null && index < wInf.size()) {
-					wv = Piece.influence(wInf.get(index).piece.fen_char);
-					result += wv;// TODO soma das influencias brancas;
-				} else if (bInf != null && index < bInf.size()) {
-					bv = Piece.influence(bInf.get(index).piece.fen_char);
-					result += bv;// TODO soma das influencias pretas;
-				} else {
-					// casa neutra
-					// result = 0;
-					// return;
+
+		for (int index = 0; true; index++) {
+			double wv = 0;
+			double bv = 0;
+			if (whiteInfluece.size() > 0 && blackInfluece.size() > 0) {
+				wv = Piece.influence(whiteInfluece.get(index).piece.fen_char);
+				bv = Piece.influence(blackInfluece.get(index).piece.fen_char);
+				if ((result = wv + bv) != 0) {
+					return;
 				}
+			} else if (whiteInfluece.size() > 0 && index < whiteInfluece.size()) {
+				wv = Piece.influence(whiteInfluece.get(index).piece.fen_char);
+				result += wv;// TODO soma das influencias brancas;
+			} else if (blackInfluece.size() > 0 && index < blackInfluece.size()) {
+				bv = Piece.influence(blackInfluece.get(index).piece.fen_char);
+				result += bv;// TODO soma das influencias pretas;
+			} else {
+				// casa neutra
+				// result = 0;
+				return;
 			}
 		}
+		// \}
 	}
 
 	private void dir(Square[][] board, int col, int lin) {
@@ -90,16 +86,16 @@ public class Square {
 				if (Piece.COLOR_NONE == color || color == p.color()) {
 					if (!p.single() && (p.type() & p.tipo(col, lin)) != 0) {
 						// RQB apenas (risco rei)
-						addTh(p.color(), cont, sq);
+						addTh(p.color(), sq);
 					} else if (!distaMais1(sq)) {
 						// peao ou rei
 						if (p.type() == Piece.PAWN && col != 0 && ((p.color() == Piece.WHITE && lin == 1)
 								|| (p.color() == Piece.BLACK && lin == -1))) {
 							// peao
-							addTh(p.color(), cont, sq);
+							addTh(p.color(), sq);
 						} else if (p.type() == Piece.KING) {
 							// rei
-							addTh(p.color(), cont, sq);
+							addTh(p.color(), sq);
 						}
 					}
 				}
@@ -109,22 +105,11 @@ public class Square {
 		}
 	}
 
-	private void addTh(int color, int cont, Square sq) {
-		List<Square> list = null;
+	private void addTh(int color, Square sq) {
 		if (color == Piece.WHITE) {
-			list = whiteInfluece.get(cont);
+			whiteInfluece.add(sq);
 		} else {
-			list = blackInfluece.get(cont);
-		}
-		if (list == null) {
-			list = new ArrayList<Square>();
-		}
-		list.add(sq);
-		// color = p.color();
-		if (color == Piece.WHITE) {
-			whiteInfluece.put(cont, list);
-		} else {
-			blackInfluece.put(cont, list);
+			blackInfluece.add(sq);
 		}
 		add = true;
 	}

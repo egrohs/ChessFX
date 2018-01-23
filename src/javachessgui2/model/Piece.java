@@ -35,38 +35,31 @@ public class Piece {
 	}
 
 	public static double influence(char fen_char) {
-		switch (Character.toLowerCase(fen_char)) {
+		switch (fen_char) {
 		case 'p':
-			return 9;
+			return -9;
 		case 'n':
-			return 5;
+			return -5;
 		case 'b':
-			return 5;
+			return -5;
 		case 'r':
-			return 3;
+			return -3;
 		case 'q':
-			return 1;
+			return -1;
 		case 'k':
+			return -0.1;
+		case 'P':
+			return 9;
+		case 'N':
+			return 5;
+		case 'B':
+			return 5;
+		case 'R':
+			return 3;
+		case 'Q':
+			return 1;
+		case 'K':
 			return 0.1;
-		default:
-			return 0;
-		}
-	}
-
-	public static double value(char fen_char) {
-		switch (Character.toLowerCase(fen_char)) {
-		case 'p':
-			return 1;
-		case 'n':
-			return 3;
-		case 'b':
-			return 3.5;
-		case 'r':
-			return 5;
-		case 'q':
-			return 9;
-		case 'k':
-			return Integer.MAX_VALUE;
 		default:
 			return 0;
 		}
@@ -257,7 +250,7 @@ public class Piece {
 	public Boolean sliding() {
 		return ((code() & SLIDING) != 0);
 	}
-	
+
 	public Boolean single() {
 		return ((code() & SINGLE) != 0);
 	}
