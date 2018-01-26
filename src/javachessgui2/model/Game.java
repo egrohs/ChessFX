@@ -39,7 +39,7 @@ public class Game {
 	public String split_dir;
 	public GameNode current_node;
 	public Board board = new Board();
-	Analizer an = new Analizer(board.board);
+	//public Analizer an = new Analizer(board.board);
 	final int ST_LEAD = 0;
 	final int ST_HEAD = 1;
 	final int ST_SEP = 2;

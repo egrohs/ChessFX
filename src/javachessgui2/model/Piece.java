@@ -28,26 +28,38 @@ public class Piece {
 	char fen_char = ' ';
 
 	public int tipo(int x, int y) {
-		if (x > 0 && y > 0) {
+		if (x != 0 && y != 0) {
 			return DIAGONAL;
 		} else
 			return STRAIGHT;
 	}
 
 	public static double influence(char fen_char) {
-		switch (Character.toLowerCase(fen_char)) {
-		case 'p':
+		switch (fen_char) {
+		case 'P':
 			return 9;
-		case 'n':
+		case 'N':
 			return 5;
-		case 'b':
+		case 'B':
 			return 5;
-		case 'r':
+		case 'R':
 			return 3;
-		case 'q':
+		case 'Q':
 			return 1;
-		case 'k':
+		case 'K':
 			return 0.1;
+		case 'p':
+			return -9;
+		case 'n':
+			return -5;
+		case 'b':
+			return -5;
+		case 'r':
+			return -3;
+		case 'q':
+			return -1;
+		case 'k':
+			return -0.1;
 		default:
 			return 0;
 		}
