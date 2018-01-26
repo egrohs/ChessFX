@@ -63,10 +63,13 @@ public class Square {
 		dir(board, -1, -2);
 
 		// TODO os fors nao precisam ir ate cont < 10 ou board.length
-		for (int cont = 0; cont < 10; cont++) {
+		int max = Math.max(whiteInfluece.size(), blackInfluece.size());
+		for (int cont = 0; cont <= max; cont++) {
 			List<Square> wInf = whiteInfluece.get(cont);
 			List<Square> bInf = blackInfluece.get(cont);
-			for (int index = 0; index < board.length; index++) {
+			int max2 = Math.max(wInf != null ? wInf.size() : 0, bInf != null ? bInf.size() : 0);
+			for (int index = 0; index < max2; index++) {
+
 				double wv = 0;
 				double bv = 0;
 				if (wInf != null && bInf != null) {

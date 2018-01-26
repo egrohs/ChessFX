@@ -1,4 +1,5 @@
 package javachessgui2.gui;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -6,7 +7,9 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
+
 import javachessgui2.info.Analizer;
 import javachessgui2.model.Board;
 import javachessgui2.model.Game;
@@ -56,27 +59,33 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
 class MyEngine extends Engine {
 	@Override
 	public void receive_intro(String what) {
 		Gui.engine_text_area.setText(what);
 	}
+
 	Boolean do_update = true;
+
 	@Override
 	public void update_engine() {
 		if (do_update) {
 			Gui.update_engine();
 		}
 	}
+
 	@Override
 	public String get_config_path() {
 		return Gui.config.uci_engine_path;
 	}
+
 	@Override
 	public void set_config_path(String set_path) {
 		Gui.config.uci_engine_path = set_path;
 	}
 }
+
 class AnnotationFormatCell extends ListCell<String> {
 	public static Color get_color(String item) {
 		item = " " + item + " ";
@@ -97,8 +106,10 @@ class AnnotationFormatCell extends ListCell<String> {
 		}
 		return (Color.GRAY);
 	}
+
 	public AnnotationFormatCell() {
 	}
+
 	@Override
 	protected void updateItem(String item, boolean empty) {
 		// calling super here is very important - don't skip this!
@@ -116,6 +127,7 @@ class AnnotationFormatCell extends ListCell<String> {
 		setTextFill(c);
 	}
 }
+
 class GameListFormatCell extends ListCell<String> {
 	public static Color get_color(String item) {
 		if (item.contains("--->")) {
@@ -126,8 +138,10 @@ class GameListFormatCell extends ListCell<String> {
 			return (Color.GREEN);
 		}
 	}
+
 	public GameListFormatCell() {
 	}
+
 	@Override
 	protected void updateItem(String item, boolean empty) {
 		// calling super here is very important - don't skip this!
@@ -140,33 +154,40 @@ class GameListFormatCell extends ListCell<String> {
 		setTextFill(c);
 	}
 }
+
 class FxUtils {
 	public static String toRGBCode(Color color) {
 		return String.format("#%02X%02X%02X", (int) (color.getRed() * 255), (int) (color.getGreen() * 255),
 				(int) (color.getBlue() * 255));
 	}
 }
+
 class Config implements java.io.Serializable {
 	int target_board_size = 400;
 	String uci_engine_path = null;
 	String initial_dir = null;
+
 	public Config() {
 	}
 }
+
 class MyButton extends Button {
 	public String text;
 	public static EventHandler<ActionEvent> button_pressed_handler;
+
 	public MyButton(String set_text) {
 		text = set_text;
 		super.setText(set_text);
 		super.setOnAction(button_pressed_handler);
 	}
+
 	public MyButton(String set_text, ImageView image) {
 		super(set_text, image);
 		text = set_text;
 		super.setOnAction(button_pressed_handler);
 	}
 }
+
 public class Gui {
 	public static Book book = new Book("book");
 	static int hbox_padding = 2;
@@ -243,26 +264,31 @@ public class Gui {
 	static Hashtable translit_dark = new Hashtable();
 	/////////////////////////////////////////////
 	static Game game = new Game();
+
 	/////////////////////////////////////////////
 	public static void show() {
 		gui_stage.show();
 	}
+
 	/////////////////////////////////////////////
 	public static void shut_down() {
 		engine.stop_engine_process();
 		System.out.println("gui shut down");
 	}
+
 	/////////////////////////////////////////////
 	static void flip() {
 		flip = !flip;
 		restart_engine = false;
 		check_engine_after_making_move();
 	}
+
 	static ColorPicker[] color_pickers = new ColorPicker[BoardStyle.NUM_COLORS];
 	static CheckBox[] checks = new CheckBox[BoardStyle.NUM_CHECKS];
 	static Slider[] sliders = new Slider[BoardStyle.NUM_SLIDERS];
 	static TextField save_as_text;
 	static Button save_as_button;
+
 	static Group create_setup_board_group() {
 		Group setup_board_group = new Group();
 		GridPane setup_board_grid = new GridPane();
@@ -429,10 +455,12 @@ public class Gui {
 		setup_board_group.getChildren().add(setup_board_grid);
 		return setup_board_group;
 	}
+
 	static void stop_engine() {
 		engine.stop();
 		restart_engine = false;
 	}
+
 	static void reset() {
 		stop_engine();
 		game.reset();
@@ -440,12 +468,14 @@ public class Gui {
 		last_open_pgn_path = "";
 		check_engine_after_making_move();
 	}
+
 	static void resetf() {
 		stop_engine();
 		game.reset();
 		flip();
 		check_engine_after_making_move();
 	}
+
 	static void clip_to_pgn() {
 		stop_engine();
 		String pgn = clip.getString();
@@ -454,6 +484,7 @@ public class Gui {
 		set_pgn_title();
 		check_engine_after_making_move();
 	}
+
 	static void pgn_to_clip() {
 		ClipboardContent content = new ClipboardContent();
 		game.set_flip = false;
@@ -462,6 +493,7 @@ public class Gui {
 		clip.setContent(content);
 		clip_info(pgn, true);
 	}
+
 	static void clip_to_fen() {
 		stop_engine();
 		String fen = clip.getString();
@@ -469,6 +501,7 @@ public class Gui {
 		clip_info(fen, false);
 		check_engine_after_making_move();
 	}
+
 	static void fen_to_clip() {
 		ClipboardContent content = new ClipboardContent();
 		String fen = game.board.report_fen();
@@ -476,22 +509,27 @@ public class Gui {
 		clip.setContent(content);
 		clip_info(fen, true);
 	}
+
 	static MyModal setup_board_modal;
 	static BoardStyle old_style;
+
 	static void style() {
 		setup_board_modal = new MyModal(create_setup_board_group(), "Setup Board");
 		old_style = current_style.clone();
 		setup_board_modal.show_and_wait();
 	}
+
 	/////////////////////////////////////////////
 	static void update_pgn() {
 		if (game.flip_set) {
 			flip = game.flip;
 		}
 	}
+
 	static void save_config() {
 		MySerialize.write("config.ser", config);
 	}
+
 	static void set_pgn_title() {
 		Object white_obj = game.pgn_header_hash.get("White");
 		String white = "";
@@ -510,7 +548,9 @@ public class Gui {
 		}
 		gui_stage.setTitle("Game " + white + " - " + black + " " + result);
 	}
+
 	static String last_open_pgn_path = "";
+
 	static void open_pgn() {
 		stop_engine();
 		if (config.initial_dir != null) {
@@ -543,9 +583,11 @@ public class Gui {
 		update_pgn();
 		check_engine_after_making_move();
 	}
+
 	static int color_r;
 	static int color_g;
 	static int color_b;
+
 	public static void update_engine() {
 		if (!engine.engine_running) {
 			return;
@@ -579,7 +621,7 @@ public class Gui {
 			}
 			Color score_color = Color.rgb(color_r, color_g, color_b);
 			Move bestmove = new Move(engine.bestmove_algeb);
-			//???bestmove.from_algeb(engine.bestmove_algeb);
+			// ???bestmove.from_algeb(engine.bestmove_algeb);
 			int from_x = index_to_px(bestmove.from.i);
 			int from_y = index_to_px(bestmove.from.j);
 			int to_x = index_to_px(bestmove.to.i);
@@ -590,8 +632,7 @@ public class Gui {
 							+ engine.score_verbal + "\nscore numerical " + engine.score_numerical + "\nbestmove "
 							+ engine.bestmove_algeb);
 					engine_text_area.setStyle("-fx-display-caret: false;-fx-text-fill: rgb(" + color_r + "," + color_g
-							+ "," + color_b + ");"
-					);
+							+ "," + color_b + ");");
 					engine_text_area.setWrapText(false);
 					engine_canvas_gc.clearRect(0, 0, board_size, board_size);
 					if (engine.engine_running) {
@@ -620,13 +661,16 @@ public class Gui {
 			});
 		}
 	}
+
 	static Boolean restart_engine = false;
+
 	static void check_engine_before_making_move() {
 		if (engine.engine_running) {
 			engine.stop();
 			restart_engine = true;
 		}
 	}
+
 	static void check_engine_after_making_move() {
 		update_game();
 		if (restart_engine) {
@@ -640,6 +684,7 @@ public class Gui {
 			});
 		}
 	}
+
 	static void make() {
 		Move m = new Move(engine.bestmove_algeb);
 		// m.from_algeb();
@@ -647,6 +692,7 @@ public class Gui {
 			make_move(m);
 		}
 	}
+
 	static void deep() {
 		create_start_deep_group();
 		start_deep_modal = new MyModal(start_deep_group, "Deep Analysis");
@@ -684,6 +730,7 @@ public class Gui {
 		start_deep_modal.show_and_wait();
 		engine.do_update = true;
 	}
+
 	static void go() {
 		String status = game.board.report_status();
 		if (status != "") {
@@ -693,23 +740,28 @@ public class Gui {
 		engine.fen = game.board.report_fen();
 		engine.go();
 	}
+
 	static void stop() {
 		stop_engine();
 	}
+
 	static void forward() {
 		check_engine_before_making_move();
 		game.forward();
 		check_engine_after_making_move();
 	}
+
 	static void begin() {
 		check_engine_before_making_move();
 		game.jump_to(0);
 		game_list.getSelectionModel().select(0);
 		check_engine_after_making_move();
 	}
+
 	static void clip_info(String content, Boolean to) {
 		Main.system_message("<b>Content copied " + (to ? "to" : "from") + " clipboard</b>:\n\n" + content, 4000);
 	}
+
 	static void save_pgn_to_file(MyFile my_file) {
 		game.set_flip = true;
 		game.flip = flip;
@@ -721,6 +773,7 @@ public class Gui {
 				+ "</font><font color=\"green\" size=\"4\">." + my_file.get_extension_only()
 				+ "</font>\n\nContent</b>:\n\n" + my_file.content, 3000);
 	}
+
 	static void save_pgn() {
 		if (last_open_pgn_path.equals("")) {
 			save_pgn_as();
@@ -729,6 +782,7 @@ public class Gui {
 			save_pgn_to_file(my_file);
 		}
 	}
+
 	static void highlight_name_in_path() {
 		String path = save_pgn_as_text.getText();
 		if (path.length() < 5) {
@@ -743,13 +797,16 @@ public class Gui {
 			save_pgn_as_text.selectRange(index, path.length() - 4);
 		}
 	}
+
 	static MyModal save_pgn_as_modal;
+
 	static void save_pgn_as() {
 		save_pgn_as_modal = new MyModal(create_save_pgn_as_group(), "Save PGN as");
 		save_pgn_as_modal.setxywh(50, 50, 850, 160);
 		highlight_name_in_path();
 		save_pgn_as_modal.show_and_wait();
 	}
+
 	static Group create_save_pgn_as_group() {
 		Group save_pgn_as_group = new Group();
 		save_pgn_as_text.setMinWidth(800);
@@ -783,6 +840,7 @@ public class Gui {
 		save_pgn_as_group.getChildren().add(save_pgn_as_vbox);
 		return save_pgn_as_group;
 	}
+
 	static void end() {
 		check_engine_before_making_move();
 		game.calc_game_to_end();
@@ -790,20 +848,24 @@ public class Gui {
 		game_list.getSelectionModel().select(game.calc_ptr - 1);
 		check_engine_after_making_move();
 	}
+
 	static void back() {
 		check_engine_before_making_move();
 		game.back();
 		check_engine_after_making_move();
 	}
+
 	static void del() {
 		check_engine_before_making_move();
 		game.del();
 		check_engine_after_making_move();
 	}
+
 	static void load_engine() {
 		engine.load_engine(null);
 		save_config();
 	}
+
 	public static void handle_button_pressed(ActionEvent e) {
 		MyButton source = (MyButton) e.getSource();
 		if (source == flip_button) {
@@ -870,8 +932,10 @@ public class Gui {
 			save_pgn_as();
 		}
 	}
+
 	static String[] sorted_sans;
 	static int num_sans;
+
 	static void update_game() {
 		game.board.list_legal_moves(null);
 		num_sans = game.board.legal_sans_cnt;
@@ -928,9 +992,10 @@ public class Gui {
 		// an.printVals(-1);
 		// System.out.println("White");
 		// an.printVals(1);
-		draw_board();
 		Analizer.calc(game.board.board);
+		draw_board();
 	}
+
 	static void highlight_last_move() {
 		highlight_canvas_gc.clearRect(0, 0, board_size, board_size);
 		if (game.current_node.parent_node != null) {
@@ -945,6 +1010,7 @@ public class Gui {
 					arc, arc);
 		}
 	}
+
 	public static void make_move(Move m) {
 		check_engine_before_making_move();
 		String fen = game.board.report_fen();
@@ -953,6 +1019,7 @@ public class Gui {
 		book.add_move(fen, san);
 		check_engine_after_making_move();
 	}
+
 	public static void make_san_move(String san) {
 		check_engine_before_making_move();
 		String fen = game.board.report_fen();
@@ -960,6 +1027,7 @@ public class Gui {
 		book.add_move(fen, san);
 		check_engine_after_making_move();
 	}
+
 	static Boolean is_drag_going = false;
 	static Square drag_from;
 	static Square drag_to;
@@ -1035,6 +1103,7 @@ public class Gui {
 			}
 		}
 	};
+
 	/////////////////////////////////////////////
 	static void init_translit() {
 		translit_light.put(' ', ' ');
@@ -1064,9 +1133,11 @@ public class Gui {
 		translit_dark.put('q', 'W');
 		translit_dark.put('k', 'L');
 	}
+
 	/////////////////////////////////////////////
 	static int stage_border_width_x = 25;
 	static int stage_border_width_y = 40;
+
 	static void resize_target_board_size(int set_target_board_size) {
 		board_pane_vertical_box.getChildren().remove(0);
 		set_target_board_size(set_target_board_size);
@@ -1094,11 +1165,13 @@ public class Gui {
 		board_controls_box.setMinWidth(board_size);
 		board_controls_box.setMaxWidth(board_size);
 	}
+
 	static int calc_board_size(int set_piece_size) {
 		return 2 * set_piece_size * margin_percent / 100
 				+ (2 * set_piece_size * (current_style.sliders[BoardStyle.PADDING_PERCENT]
 						+ current_style.sliders[BoardStyle.INNER_PADDING_PERCENT]) / 100 + set_piece_size) * 8;
 	}
+
 	static void set_target_board_size(int set_target_board_size) {
 		config.target_board_size = set_target_board_size;
 		save_config();
@@ -1137,6 +1210,7 @@ public class Gui {
 		board_canvas_group.setOnMouseReleased(board_canvas_handler);
 		draw_board();
 	}
+
 	/////////////////////////////////////////////
 	static String fen_char_to_font_at(char fen_char, int i, int j) {
 		int square_color = 1 - ((i + j) % 2);
@@ -1149,34 +1223,55 @@ public class Gui {
 		}
 		return " ";
 	}
+
 	static int true_index(int index) {
 		return flip ? (7 - index) : index;
 	}
+
 	static int px_to_index(int px) {
 		return true_index((px - board_margin) / board_square_size);
 	}
+
 	static int index_to_px(int index) {
 		return board_margin + true_index(index) * board_square_size + half_board_square_size;
 	}
+
 	static int index_to_piece_px(int index) {
 		return board_margin + true_index(index) * board_square_size + board_padding + board_inner_padding;
 	}
+
 	static int index_to_piece_outer_px(int index) {
 		return board_margin + true_index(index) * board_square_size + board_padding;
 	}
+
 	static int i_to_font_x(int i) {
 		return index_to_px(i) - half_board_square_size + board_padding + board_inner_padding;
 	}
+
 	static int j_to_font_y(int j) {
 		return index_to_px(j) + half_board_square_size - board_padding - board_inner_padding;
 	}
+
 	static void fill_square(int i, int j) {
-		int square_color = 1 - ((i + j) % 2);
-		board_canvas_gc.setFill(square_color == 1 ? current_style.colors(BoardStyle.LIGHT_SQUARE_COLOR)
-				: current_style.colors(BoardStyle.DARK_SQUARE_COLOR));
-		board_canvas_gc.fillRect(index_to_piece_outer_px(i), index_to_piece_outer_px(j), full_piece_size,
-				full_piece_size);
+		if (Analizer.board[i][j] != null) {
+			// int square_color = 1 - ((i + j) % 2);
+			// board_canvas_gc.setFill(square_color == 1 ?
+			// current_style.colors(BoardStyle.LIGHT_SQUARE_COLOR)
+			// : current_style.colors(BoardStyle.DARK_SQUARE_COLOR));
+			// board_canvas_gc.setFill(square_color == 1 ?
+			// current_style.colors(BoardStyle.LIGHT_SQUARE_COLOR)
+			// : current_style.colors(BoardStyle.DARK_SQUARE_COLOR));
+			if (Analizer.board[i][j].result >= 0) {
+				board_canvas_gc.setFill(Color.color(Analizer.board[i][j].result / 32, 0, 0));
+			} else {
+				board_canvas_gc.setFill(Color.color(0, Math.abs(Analizer.board[i][j].result / 32), 0));
+			}
+			board_canvas_gc.fillRect(index_to_piece_outer_px(i), index_to_piece_outer_px(j), full_piece_size,
+					full_piece_size);
+		}
+		// board_canvas_gc.setFill(current_style.colors(BoardStyle.LIGHT_SQUARE_COLOR));
 	}
+
 	static void put_piece_xy(Piece p, int x, int y, GraphicsContext gc, int i, int j) {
 		int piece_color = p.color();
 		String font = fen_char_to_font_at(
@@ -1194,11 +1289,13 @@ public class Gui {
 			}
 		}
 	}
+
 	static void clear_board() {
 		board_canvas_gc.setFill(current_style.colors(BoardStyle.BOARD_COLOR));
 		board_canvas_gc.fillRect(0, 0, board_size, board_size);
 		board_canvas_gc.setLineWidth(1);
 	}
+
 	static void draw_board() {
 		clear_board();
 		for (int j = 0; j < 8; j++) {
@@ -1209,8 +1306,10 @@ public class Gui {
 		}
 		fen_text.setText(game.board.report_fen());
 	}
+
 	/////////////////////////////////////////////
 	static Config config;
+
 	static void read_in_config() {
 		Object o = MySerialize.read("config.ser");
 		if (o == null) {
@@ -1219,6 +1318,7 @@ public class Gui {
 		}
 		config = (Config) o;
 	}
+
 	static void read_in_style(String path) {
 		Object o = MySerialize.read(path);
 		if (o == null) {
@@ -1229,9 +1329,11 @@ public class Gui {
 		}
 		current_style = (BoardStyle) o;
 	}
+
 	static Group select_notation_group;
 	static ListView<String> select_notation_list;
 	static MyModal modal;
+
 	private static void create_select_notation_group() {
 		select_notation_group = new Group();
 		select_notation_list = new ListView<String>();
@@ -1250,7 +1352,9 @@ public class Gui {
 		});
 		select_notation_group.getChildren().add(select_notation_list);
 	}
+
 	static int selected_notation;
+
 	private static void select_notation_for(String san) {
 		String fen_before = game.board.report_fen();
 		Hashtable pos = book.get_pos(fen_before);
@@ -1281,6 +1385,7 @@ public class Gui {
 		}
 		update_game();
 	}
+
 	static int sel_book_move;
 	private static EventHandler<MouseEvent> mouseHandlerBook = new EventHandler<MouseEvent>() {
 		@Override
@@ -1327,14 +1432,17 @@ public class Gui {
 			}
 		}
 	};
+
 	static Boolean valid_index(int index, int max) {
 		if (index < 0) {
 			return false;
 		}
 		return (index < max);
 	}
+
 	static VBox moves_vbox = new VBox();
 	static HBox moves_hbox = new HBox(hbox_padding);
+
 	public static void init(Stage set_gui_stage) {
 		HBox main_hbox = new HBox(hbox_padding);
 		game.board.init_move_table();
@@ -1493,6 +1601,7 @@ public class Gui {
 		}
 		System.out.println("gui initialized");
 	}
+
 	//////////////////////////////////////////////////////////////////
 	static Group start_deep_group;
 	static Button deep_stop_button;
@@ -1509,6 +1618,7 @@ public class Gui {
 	static Runnable runnable_update_deep_thread;
 	static Thread do_deep_thread;
 	static Thread update_deep_thread;
+
 	private static void create_start_deep_group() {
 		int width = 440;
 		start_deep_group = new Group();
@@ -1532,6 +1642,7 @@ public class Gui {
 		deep_vbox.getChildren().add(progress);
 		start_deep_group.getChildren().add(deep_vbox);
 	}
+
 	public static void update_deep() {
 		try {
 			Thread.sleep(500);
@@ -1552,6 +1663,7 @@ public class Gui {
 			}
 		}
 	}
+
 	public static void do_deep() {
 		do_deep_i = 0;
 		String fen = game.board.report_fen();
